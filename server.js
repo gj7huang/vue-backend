@@ -35,7 +35,8 @@ const saveImage = dataURL => {
   const hash = crypto.createHash('md5').update(base64Data).digest("hex");
   const filename = `${hash}.png`;
   fs.writeFileSync(path.resolve(imgPath, filename), base64Data, 'base64');
-  return `https://${CUSTOMVAR_HOSTNAME}:${PORT}/img/${filename}`;
+  // return `https://${CUSTOMVAR_HOSTNAME}:${PORT}/img/${filename}`;
+  return `https://${CUSTOMVAR_HOSTNAME}/img/${filename}`;
 }
 
 app.route('/')
