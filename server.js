@@ -6,11 +6,10 @@ const crypto = require('crypto');
 const path = require('path');
 const _ = require('lodash');
 
-const { PORT = 8081, CUSTOMVAR_HOSTNAME = "localhost" } = process.env;
-
+const { PORT = 8081, HOST = "localhost" } = process.env;
 
 const app = express();
-app.listen(PORT, () => console.log(`app started at http://${CUSTOMVAR_HOSTNAME}:${PORT}`));
+app.listen(PORT, () => console.log(`app started at http://${HOST}:${PORT}`));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
@@ -34,7 +33,7 @@ const saveImage = dataURL => {
   const hash = crypto.createHash('md5').update(base64Data).digest("hex");
   const filename = `${hash}.png`;
   fs.writeFileSync(path.resolve(imgPath, filename), base64Data, 'base64');
-  return `https://${CUSTOMVAR_HOSTNAME}:${PORT}/img/${filename}`;
+  return `https://${HOST}:${PORT}/img/${filename}`;
 }
 
 app.route('/')
