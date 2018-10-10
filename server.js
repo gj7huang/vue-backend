@@ -13,9 +13,21 @@ const { PORT = 8081, CUSTOMVAR_HOSTNAME = "localhost" } = process.env;
 const app = express();
 app.listen(PORT, () => console.log(`app started at http://${CUSTOMVAR_HOSTNAME}:${PORT}`));
 
+app.engine('html', require('ejs').renderFile);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'html');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
 app.use(cors());
+
+app.use('/', express.static(__dirname + '/views'));
+
+// show index
+app.route('/')
+    .get((req, res) => {
+        res.render('index');
+    
 
 const lessons = [];
 
@@ -39,7 +51,7 @@ const saveImage = dataURL => {
   return `https://${CUSTOMVAR_HOSTNAME}/img/${filename}`;
 }
 
-app.route('/')
+app.route('/show')
   .post((req, res) => {
     const image = saveImage(req.body.image);
     const data = _.omit(req.body, 'image');
@@ -52,7 +64,7 @@ app.route('/')
     res.json(lessons);
   });
 
-app.route('/:id')
+app.route('/show/:id')
   .get((req, res) => {
     res.json(lessons.find(n => n.id == req.params.id));
   })
